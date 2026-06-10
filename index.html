@@ -142,7 +142,6 @@
             display: block;
         }
 
-        /* עיצוב לחצן גלילה לברכות */
         .scroll-to-blessings-container {
             margin: 15px 0 40px;
             z-index: 2;
@@ -338,6 +337,7 @@
             color: var(--gold-light);
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
             margin-top: 20px;
+            white-space: pre-wrap; /* מבטיח ירידת שורה תקינה בטקסט הארוך */
         }
 
         .modal-day {
@@ -351,7 +351,6 @@
             display: inline-block;
         }
 
-        /* --- קונטיינר אודיו מעודכן עם סליידר ווליום מובנה --- */
         .audio-control-container {
             position: fixed;
             top: 20px;
@@ -369,7 +368,6 @@
             transition: all 0.3s ease;
         }
 
-        /* עיצוב הסליידר להנמכת המוזיקה */
         .volume-slider-wrapper {
             width: 0px;
             opacity: 0;
@@ -443,7 +441,7 @@
         .audio-btn.playing #icon-play { display: block; }
         .audio-btn.playing #icon-mute { display: none; }
         .audio-btn:not(.playing) #icon-play { display: none; }
-        .audio-btn:not(.playing) #icon-mute { display: block; }
+        .audio-btn:not(.playing) #icon-mute { block; }
 
         @keyframes pulseMusic {
             0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); }
@@ -470,7 +468,6 @@
             100% { transform: translateX(-6px); }
         }
 
-        /* --- Blessings Section --- */
         .blessings-section {
             position: relative;
             z-index: 2;
@@ -518,18 +515,17 @@
             height: 100px;
         }
 
-        /* --- Premium Floating Bubbles Animation --- */
         #floating-blessings-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* מאפשר לחיצה על הבועות עצמן דרך הגדרת הילדים */
+            pointer-events: none;
             z-index: 998;
             overflow: hidden;
         }
 
         .floating-blessing {
             position: absolute;
-            pointer-events: auto; /* מאפשר לחיצה על הברכה בשביל לפוצץ אותה */
+            pointer-events: auto;
             background: linear-gradient(135deg, rgba(25, 22, 15, 0.95), rgba(10, 10, 10, 0.98));
             border: 1px solid var(--gold-main);
             color: var(--gold-light);
@@ -557,7 +553,6 @@
             100% { transform: translateY(-15vh) translateX(-10px) scale(0.85); opacity: 0; }
         }
 
-        /* Admin Panels & Management */
         .admin-trigger {
             position: fixed;
             bottom: 15px;
@@ -654,7 +649,15 @@
             margin-top: 10px;
         }
 
-        .admin-blessing-item, .admin-slot-item {
+        .admin-slot-item {
+            padding: 10px;
+            border-bottom: 1px solid #222;
+            font-size: 0.95rem;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .admin-blessing-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -787,14 +790,12 @@
 
             <div class="admin-input-group" style="margin-top: 20px;">
                 <label>תוכן המשבצות והסודות (10 ימים):</label>
-                <div class="admin-slots-list" id="admin-slots-container">
-                    </div>
+                <div class="admin-slots-list" id="admin-slots-container"></div>
             </div>
 
             <div class="admin-input-group" style="margin-top: 20px;">
                 <label>ניהול ומחיקת ברכות מהאתר:</label>
-                <div class="admin-blessings-list" id="admin-blessings-container">
-                    </div>
+                <div class="admin-blessings-list" id="admin-blessings-container"></div>
             </div>
 
             <hr style="border-color:#333; margin: 25px 0;">
@@ -847,17 +848,18 @@
             };
         }
 
+        // מערך התכנים המשודרגים - מיושרים ומסודרים מימין לשמאל עם שורות חדשות
         const punchlines = {
-            10: "עשרה ימים! ההתרגשות מתחילה רשמית עכשיו, פותחים יומנים.",
-            9: "תשעה ימים! דיאטת טרום-החופה בוטלה רשמית, עוברים לתזונת אדרנלין.",
-            8: "שמונה ימים! יאללה, להכניס להילוך גבוה, החליפות מוכנות?",
-            7: "שבוע בדיוק! זמן מצוין לבדוק שוב שהטבעת אכן בטוחה ולא נכנסה לכביסה.",
-            6: "שישה ימים! מינדי כבר סגרה הכל לפני חודשיים, מנחם רק מתחיל לעכל.",
-            5: "חמישה ימים של טירוף חושים. חלומות על סידורי הושבה הופכים למציאות.",
-            4: "ארבעה ימים! אפשר להפסיק לרענן את תחזית מזג האוויר. יהיה מושלם.",
-            3: "שלושה ימים! הפלייליסט של החתונה כבר מנגן בלופ בראש.",
-            2: "מחרתיים! הפרפרים בבטן כבר מזמן הפכו ללהקת ציפורים שלמה.",
-            1: "מנחם & מינדי מזל טוב היום הגדול הגיע"
+            10: "עשרה ימים! ההתרגשות מתחילה רשמית עכשיו, פותחים יומנים.\n\n\"הִנֵּה יָמִים בָּאִים נְאֻם ה' וְנִבְנְתָה הָעִיר לַה'\" (ירמיהו לא).",
+            9: "תשעה ימים! דיאטת טרום-החופה בוטלה רשמית, עוברים לתזונת אדרנלין.\n\n\"טוֹבִים הַשְּׁנַיִם מִן הָאֶחָד אֲשֶׁר יֵשׁ לָהֶם שָׂכָר טוֹב בַּעֲמָלָם\" (קהלת ד).",
+            8: "שמונה ימים! יאללה, להכניס להילוך גבוה, החליפות מוכנות?\n\n\"אָז יִמָּלֵא שְׂחוֹק פִּינוּ וּלְשׁוֹנֵנוּ רִנָּה... הִגְדִּיל ה' לַעֲשׂוֹת עִמָּנוּ שְׂמֵחִים הָיִינוּ\" (תהילים קכו).",
+            7: "שבוע בדיוק! זמן מצוין לבדוק שוב שהטבעת אכן בטוחה ולא נכנסה לכביסה.\n\n\"שִׁבְעַת יָמִים תָּחֹג לַה' אֱלֹהֶיךָ... וְהָיִיתָ אַךְ שָׂמֵחַ\" (דברים טז).",
+            6: "שישה ימים! מינדי כבר סגרה הכל לפני חודשיים, מנחם רק מתחיל לעכל.\n\n\"שֵׁשֶׁת יָמִים תַּעֲשֶׂה מַעֲשֶׂיךָ... וּבַיּוֹם הַשְּׁבִיעִי תִּשְׁבֹּת\" (שמות כג).",
+            5: "חמישה ימים של טירוף חושים. חלומות על סידורי הושבה הופכים למציאות.\n\n\"קֹול שָׂשׂוֹן וְקֹול שִׂמְחָה קֹול חָתָן וְקֹול כַּלָּה\" (ירמיהו לג).",
+            4: "ארבעה ימים! אפשר להפסיק לרענן את תחזית מזג האוויר. יהיה מושלם.\n\n\"וִירָשְׂתֶּם אֹתָהּ וִישַׁבְתֶּם בָּהּ... אַרְבַּע עֶשְׂרֵה שָׁנָה\" (דברים יא / בראשית לא).",
+            3: "שלושה ימים! הפלייליסט של החתונה כבר מנגן בלופ בראש.\n\n\"חוּט הַמְשֻׁלָּשׁ לֹא בִמְהֵרָה יִנָּתֵק\" (קהלת ד).",
+            2: "מחרתיים! הפרפרים בבטן כבר מזמן הפכו ללהקת ציפורים שלמה.\n\n\"וַיִּהְיוּ בְעֵינָיו כְּיָמִים אֲחָדִים בְּאַהֲבָתוֹ אֹתָהּ\" (בראשית כט).",
+            1: "מנחם & מינדי, מזל טוב! היום הגדול והמרגש הגיע.\n\n\"מָצָא אִשָּׁה מָצָא טוֹב וַיָּפֶק רָצוֹן מֵה'\" (משלי יח).\nיהי רצון שהבית שאתם מקימים היום יהיה בניין עדי עד, מלא באור, שמחה, אהבה, ברכה והצלחה!"
         };
 
         let isCountdownStarted = localStorage.getItem('weddingCountdownStarted') === 'true';
@@ -883,7 +885,6 @@
             });
         }
 
-        // ניסיון הפעלה אוטומטית בכל תזוזה או אינטראקציה ראשונית עם המסך
         const autoplayEvents = ['click', 'touchstart', 'mousemove', 'scroll'];
         autoplayEvents.forEach(evt => {
             window.addEventListener(evt, () => {
@@ -896,7 +897,6 @@
             }, { once: true });
         });
 
-        // שינוי עוצמת השמע באמצעות הסליידר
         audioVolumeSlider.addEventListener('input', function() {
             audioPlayer.volume = this.value;
             if(this.value == 0) {
@@ -908,8 +908,6 @@
 
         const toggleAudio = (e) => {
             e.stopPropagation();
-            
-            // פתיחה או סגירה של סליידר ההנמכה בלחיצה
             audioContainer.classList.toggle('slider-open');
 
             if (audioPlayer.paused) {
@@ -917,16 +915,12 @@
                 audioPlayer.dataset.manuallyMuted = "";
                 globalAudioBtn.classList.add('playing');
                 audioHintText.style.display = "none";
-            } else {
-                // אם כבר פתוח והמשתמש לוחץ שוב, זה יאפשר לו לשלוט או לסגור.
-                // בשביל נוחות, השארנו את הניגון פעיל ורק פתחנו את בר הווליום.
             }
         };
 
         globalAudioBtn.addEventListener('click', toggleAudio);
         audioHintText.addEventListener('click', toggleAudio);
 
-        // סגירת הסליידר אם לוחצים מחוץ לאזור האודיו
         document.addEventListener('click', (e) => {
             if (!audioContainer.contains(e.target)) {
                 audioContainer.classList.remove('slider-open');
@@ -953,7 +947,6 @@
             } catch (e) { }
         }
 
-        // פונקציית יצירת נצנצים מתפוצצים בלחיצה על ברכה
         function createGlitterExplosion(x, y) {
             for (let i = 0; i < 24; i++) {
                 const p = document.createElement('div');
@@ -965,8 +958,6 @@
                 p.style.borderRadius = '50%';
                 p.style.pointerEvents = 'none';
                 p.style.zIndex = '99999';
-                
-                // צבע נצנצים רנדומלי (זהב או לבן מבריק)
                 p.style.background = Math.random() > 0.5 ? 'var(--gold-light)' : '#ffffff';
                 p.style.boxShadow = '0 0 8px ' + (Math.random() > 0.5 ? 'var(--gold-main)' : '#fff');
                 
@@ -997,6 +988,7 @@
             const cube = document.createElement('div');
             cube.className = 'cube';
             
+            // המרת החישוב כדי שהימים ייפתחו בסדר עולה: ביום הראשון יום 10 פתוח, בשני יום 9 וכו'
             const isUnlocked = isCountdownStarted && ((10 - i) <= daysPassed);
             
             if (!isUnlocked) {
@@ -1069,7 +1061,6 @@
             punchlineModal.classList.remove('active', 'flash-lights');
         });
 
-        // --- מנגנון ניהול סודי ומעודכן ---
         const adminTrigger = document.getElementById('admin-trigger');
         const adminModal = document.getElementById('admin-modal');
         const bgFileInput = document.getElementById('bg-file-input');
@@ -1082,14 +1073,13 @@
         const adminBlessingsContainer = document.getElementById('admin-blessings-container');
         const adminSlotsContainer = document.getElementById('admin-slots-container');
 
-        // רנדור רשימת התוכן של כל המשבצות בתוך פאנל הניהול
         function renderAdminSlots() {
             adminSlotsContainer.innerHTML = '';
             for(let i = 10; i >= 1; i--) {
                 const item = document.createElement('div');
                 item.className = 'admin-slot-item';
                 item.innerHTML = `
-                    <span><strong>משבצת יום ${i}:</strong> ${punchlines[i]}</span>
+                    <span><strong>משבצת יום ${i}:</strong> ${punchlines[i].replace(/\n/g, ' ')}</span>
                 `;
                 adminSlotsContainer.appendChild(item);
             }
@@ -1125,12 +1115,12 @@
             if (password === "1234") {
                 adminModal.classList.add('active');
                 renderAdminBlessings();
-                renderAdminSlots(); // קריאה לפונקציה שמציגה מה רשום במשבצות
+                renderAdminSlots();
                 
                 if (isCountdownStarted) {
                     startBtn.innerText = "🔄 התחל ספירה מחדש (10 ימים)";
                     restartBtn.style.display = "block";
-                    adminStatus.innerText = "הספירה פעילה. הימים מחושבים כלפי מעלה שלא יירד מיד מ-10.";
+                    adminStatus.innerText = "הספירה פעילה. הימים נפתחים בהתאם לזמן שחלף.";
                 }
             } else if (password !== null) {
                 alert("קוד שגוי.");
@@ -1148,7 +1138,7 @@
                 reader.onload = function(e) {
                     localStorage.setItem('weddingBgData', e.target.result);
                     document.body.style.backgroundImage = `url('${e.target.result}')`;
-                    alert("תמונת הרקע עודענה בהצלחה!");
+                    alert("תמונת הרקע עודכנה בהצלחה!");
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -1183,7 +1173,6 @@
             }
         });
 
-        // --- חלקיקים מרחפים ברקע ---
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 30; i++) {
             let particle = document.createElement('div');
@@ -1198,7 +1187,6 @@
             particlesContainer.appendChild(particle);
         }
 
-        // --- מערכת הברכות הצפות המשודרגת ---
         const blessingForm = document.getElementById('blessing-form');
         const blessingsContainer = document.getElementById('floating-blessings-container');
 
@@ -1214,14 +1202,12 @@
             el.className = 'floating-blessing';
             el.setAttribute('data-sender', name);
             
-            // כיתוב הברכה ותוספת קטנה ומזמינה ללחיצה בתחתיתה
             el.innerHTML = `<strong>${name}:</strong> "${text}"<small style="display:block; font-size:0.75rem; color:var(--gold-main); opacity:0.9; margin-top:5px; text-align:center;">לחצו עליי ✨</small>`;
             
             el.style.left = `${Math.random() * 75}vw`;
             const randomDuration = Math.random() * 4 + 10; 
             el.style.animationDuration = `${randomDuration}s`;
             
-            // אירוע לחיצה לפיצוץ הבועה לנצנצים
             el.addEventListener('click', (e) => {
                 e.stopPropagation();
                 createGlitterExplosion(e.clientX, e.clientY);
